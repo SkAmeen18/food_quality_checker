@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse AI | Smart Freshness</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --card-bg: #ffffff;
+            --accent: #38bdf8;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
+            padding: 35px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 { font-weight: 800; color: white; margin: 0; font-size: 2.2rem; text-align: center; }
+        .subtitle { color: #94a3b8; text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
+
+        .input-group {
+            background: white;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        label { display: block; font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+
+        input {
+            width: 100%;
+            border: none;
+            padding: 8px 0;
+            font-size: 1.1rem;
+            outline: none;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #0f172a;
+            border: none;
+            padding: 18px;
+            border-radius: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .action-btn:hover { background: white; transform: scale(1.02); }
+
+        .result-card {
+            margin-top: 25px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 25px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .status-header {
+            text-align: center;
+            padding: 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .safe { background: #dcfce7; color: #15803d; }
+        .danger { background: #fee2e2; color: #b91c1c; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px;}
+        .grid-item { background: #f8fafc; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid #f1f5f9; }
+        .val { display: block; font-weight: 800; font-size: 1rem; color: #0f172a; }
+        .lbl { font-size: 0.6rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>NutriPulse</h1>
+    <p class="subtitle">Individualized Food Safety System</p>
+
+    <div class="input-group">
+        <label>Food Item</label>
+        <input type="text" id="foodInput" placeholder="Enter food name...">
+    </div>
+
+    <div class="input-group">
+        <label>Days in Fridge</label>
+        <input type="number" id="daysInput" placeholder="0" min="0">
+    </div>
+
+    <button class="action-btn" onclick="checkAll()">ANALYZE SAFETY</button>
+
+    <div id="result" class="result-card hidden">
+        <div id="statusHeader" class="status-header"></div>
+        
+        <h2 id="foodTitle" style="margin: 0; font-size: 1.1rem; color: #64748b; text-align: center; font-weight: 400;"></h2>
+        <h3 id="displaySafeOrNot" style="text-align:center; font-size: 1.8rem; margin: 10px 0;"></h3>
+
+        <div class="grid">
+            <div class="grid-item"><span class="lbl">Protein</span><span class="val" id="pVal">0</span></div>
+            <div class="grid-item"><span class="lbl">Fiber</span><span class="val" id="fVal">0</span></div>
+            <div class="grid-item"><span class="lbl">Sodium</span><span class="val" id="sVal">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Comprehensive Fridge Life Database (Days)
+    const storageDatabase = {
+        "hummus": 5,
+        "tomatoes": 7,
+        "beans": 4,
+        "frankfurter": 7,
+        "almonds": 30,
+        "kale": 5,
+        "egg, whole": 3,
+        "egg, white": 3,
+        "egg, dried": 365,
+        "onion rings": 3,
+        "pickles": 30,
+        "cheese, parmesan": 21,
+        "cheese, pasteurized": 14,
+        "grapefruit": 7,
+        "peaches": 5,
+        "seeds": 30,
+        "bread": 7,
+        "mustard": 60,
+        "kiwifruit": 7,
+        "yogurt": 7,
+        "monterey jack": 14,
+        "cauliflower": 5,
+        "rice, red": 4,
+        "sorghum": 30,
+        "parsnips": 10,
+        "peppers": 7,
+        "swordfish": 2,
+        "watermelon": 4,
+        // Generic fallbacks
+        "chicken": 2,
+        "beef": 3,
+        "meat": 3,
+        "milk": 7
+    };
+
+    async function checkAll() {
+        const query = document.getElementById('foodInput').value.trim().toLowerCase();
+        const days = parseInt(document.getElementById('daysInput').value) || 0;
+        const resultDiv = document.getElementById('result');
+
+        if (!query) return alert("Enter food name");
+
+        try {
+            const response = await fetch('FoodData_Central_foundation_food_json_2025-12-18.json');
+            const data = await response.json();
+            const food = data.FoundationFoods.find(item => 
+                item.description.toLowerCase().includes(query)
+            );
+
+            if (!food) return alert("Food not found in database.");
+
+            // 1. Get Nutrients
+            const getNut = (name) => {
+                const n = food.foodNutrients.find(nu => nu.nutrient.name.includes(name));
+                return n ? Math.round(n.amount) : 0;
+            };
+
+            // 2. Specific Fridge Life Detection
+            let maxDays = 5; // Global Default
+            for (let key in storageDatabase) {
+                if (food.description.toLowerCase().includes(key)) {
+                    maxDays = storageDatabase[key];
+                    break;
+                }
+            }
+
+            const isSafe = days <= maxDays;
+
+            // 3. Update UI
+            document.getElementById('foodTitle').innerText = food.description;
+            document.getElementById('pVal').innerText = getNut("Protein") + "g";
+            document.getElementById('fVal').innerText = getNut("Fiber") + "g";
+            document.getElementById('sVal').innerText = getNut("Sodium") + "mg";
+
+            const header = document.getElementById('statusHeader');
+            const safeDisplay = document.getElementById('displaySafeOrNot');
+
+            if (isSafe) {
+                header.className = "status-header safe";
+                header.innerText = "SAFE TO EAT";
+                safeDisplay.innerText = "Fresh";
+                safeDisplay.style.color = "#15803d";
+            } else {
+                header.className = "status-header danger";
+                header.innerText = "NOT SAFE TO EAT";
+                safeDisplay.innerText = "Expired";
+                safeDisplay.style.color = "#b91c1c";
+            }
+
+            resultDiv.classList.remove('hidden');
+        } catch (e) {
+            alert("Error: Ensure the JSON file is in the same folder.");
+        }
+    }
+</script>
+</body>
+</html>
