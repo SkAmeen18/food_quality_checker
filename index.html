@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriPulse | Premium Food Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent: #00f2fe;
+            --glass: rgba(255, 255, 255, 0.15);
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #1a202c;
+        }
+
+        /* Abstract Background Shapes */
+        .circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .c1 { width: 300px; height: 300px; background: #4facfe; top: -50px; left: -50px; }
+        .c2 { width: 400px; height: 400px; background: #f093fb; bottom: -100px; right: -50px; }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #fff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            background: white;
+            border-radius: 20px;
+            padding: 8px;
+            display: flex;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            background: transparent;
+            color: #2d3748;
+        }
+
+        button {
+            background: #1a202c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #000;
+        }
+
+        /* Result Section */
+        .result-card {
+            margin-top: 30px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: left;
+            transform-origin: top;
+            animation: grow 0.4s ease-out;
+        }
+
+        @keyframes grow {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quality-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border-radius: 100px;
+        }
+
+        .quality-good { background: #dcfce7; color: #15803d; }
+        .quality-avg { background: #fef3c7; color: #b45309; }
+        .quality-poor { background: #fee2e2; color: #b91c1c; }
+
+        .food-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0 0 20px 0;
+            line-height: 1.2;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: #f8fafc;
+            padding: 15px 10px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+
+        .stat-icon { font-size: 1.2rem; margin-bottom: 5px; display: block; }
+        .stat-value { font-weight: 800; font-size: 1.1rem; color: #2d3748; }
+        .stat-unit { font-size: 0.7rem; color: #718096; text-transform: uppercase; display: block; }
+
+        .insight-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #475569;
+            display: flex;
+            gap: 10px;
+            line-height: 1.4;
+        }
+
+        .hidden { display: none; }
+
+        /* Custom scrollbar for desktop */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+
+    <div class="container">
+        <h1>NutriPulse</h1>
+        <p class="subtitle">AI-Driven Food Quality Assessment</p>
+
+        <div class="input-wrapper">
+            <input type="text" id="foodInput" placeholder="Enter food name...">
+            <button onclick="checkFoodQuality()" id="mainBtn">Analyze</button>
+        </div>
+
+        <div id="result" class="result-card hidden">
+            <div class="badge-row">
+                <div id="qualityBadge" class="quality-label"></div>
+                <span style="font-size: 0.8rem; color: #94a3b8;">#USDA-Verified</span>
+            </div>
+            
+            <h2 id="foodTitle" class="food-name"></h2>
+
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-icon">🥩</span>
+                    <span class="stat-value" id="pVal">0</span>
+                    <span class="stat-unit">Protein (g)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🌾</span>
+                    <span class="stat-value" id="fVal">0</span>
+                    <span class="stat-unit">Fiber (g)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🧂</span>
+                    <span class="stat-value" id="sVal">0</span>
+                    <span class="stat-unit">Sodium (mg)</span>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <span>💡</span>
+                <span id="feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function checkFoodQuality() {
+            const query = document.getElementById('foodInput').value.trim();
+            const btn = document.getElementById('mainBtn');
+            const resultDiv = document.getElementById('result');
+
+            if (!query) return;
+
+            btn.innerText = "⏳";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('FoodData_Central_foundation_food_json_2025-12-18.json');
+                const data = await response.json();
+
+                const food = data.FoundationFoods.find(item => 
+                    item.description.toLowerCase().includes(query.toLowerCase())
+                );
+
+                if (!food) {
+                    alert("Food not found. Try a basic ingredient like 'Carrot' or 'Beef'.");
+                } else {
+                    const getNutrient = (search) => {
+                        const n = food.foodNutrients.find(nu => nu.nutrient.name.includes(search));
+                        return n ? Math.round(n.amount * 10) / 10 : 0;
+                    };
+
+                    updateUI(
+                        food.description,
+                        getNutrient("Protein"),
+                        getNutrient("Fiber"),
+                        getNutrient("Sodium")
+                    );
+                    resultDiv.classList.remove('hidden');
+                }
+            } catch (e) {
+                alert("Error loading dataset. Check file name.");
+            } finally {
+                btn.innerText = "Analyze";
+                btn.disabled = false;
+            }
+        }
+
+        function updateUI(name, p, f, s) {
+            document.getElementById('foodTitle').innerText = name;
+            document.getElementById('pVal').innerText = p;
+            document.getElementById('fVal').innerText = f;
+            document.getElementById('sVal').innerText = s;
+
+            const badge = document.getElementById('qualityBadge');
+            const feedback = document.getElementById('feedback');
+
+            if (p > 12 || f > 5) {
+                badge.innerText = "Superfood Grade";
+                badge.className = "quality-label quality-good";
+                feedback.innerText = "This profile indicates exceptional nutrient density. Perfect for high-performance diets.";
+            } else if (s > 480) {
+                badge.innerText = "Processed Alert";
+                badge.className = "quality-label quality-poor";
+                feedback.innerText = "High sodium content identified. We recommend balancing this with high-potassium greens.";
+            } else {
+                badge.innerText = "Nutritional Neutral";
+                badge.className = "quality-label quality-avg";
+                feedback.innerText = "A stable energy source. Pair with fibrous vegetables for a more complete profile.";
+            }
+        }
+    </script>
+</body>
+</html>
