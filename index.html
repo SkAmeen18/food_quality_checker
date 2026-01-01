@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Quality Checker - Method 1</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 40px; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #2c3e50; }
+        .search-area { display: flex; gap: 10px; margin: 20px 0; }
+        input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; outline: none; }
+        button { background: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2980b9; }
+        .hidden { display: none; }
+        .result-card { border-top: 2px solid #eee; padding-top: 20px; text-align: left; }
+        .badge { display: inline-block; padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; margin-bottom: 15px; font-size: 0.9em; }
+        .good { background: #27ae60; }
+        .poor { background: #e74c3c; }
+        .neutral { background: #f1c40f; color: #333; }
+        .stat { margin: 8px 0; display: flex; justify-content: space-between; }
+        .stat b { color: #34495e; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quality Checker</h1>
+        <p>Analyze USDA Foundation Foods</p>
+
+        <div class="search-area">
+            <input type="text" id="foodInput" placeholder="Try 'Hummus' or 'Parsnips'">
+            <button onclick="checkFoodQuality()">Check</button>
+        </div>
+
+        <div id="result" class="result-card hidden">
+            <h2 id="foodTitle" style="margin-top:0;"></h2>
+            <div id="qualityBadge" class="badge"></div>
+            
+            <div class="stat"><span>Protein:</span> <b id="pVal">0</b>g</div>
+            <div class="stat"><span>Fiber:</span> <b id="fVal">0</b>g</div>
+            <div class="stat"><span>Sodium:</span> <b id="sVal">0</b>mg</div>
+            
+            <p id="feedback" style="font-style: italic; color: #7f8c8d; margin-top: 15px;"></p>
+        </div>
+    </div>
+
+    <script>
+        async function checkFoodQuality() {
+            const query = document.getElementById('foodInput').value.toLowerCase().trim();
+            const resultDiv = document.getElementById('result');
+
+            if (!query) return alert("Please enter a food name.");
+
+            try {
+                // METHOD 1: Fetching the dataset file from the same folder
+                const response = await fetch('FoodData_Central_foundation_food_json_2025-12-18.json');
+                
+                if (!response.ok) throw new Error("Dataset file not found.");
+                
+                const data = await response.json();
+
+                // Searching FoundationFoods array in your dataset
+                const food = data.FoundationFoods.find(item => 
+                    item.description.toLowerCase().includes(query)
+                );
+
+                if (!food) {
+                    alert("Food not found in the dataset.");
+                    return;
+                }
+
+                // Nutrient extraction helper
+                const findNutrient = (name) => {
+                    const found = food.foodNutrients.find(n => n.nutrient.name === name);
+                    return found ? found.amount : 0;
+                };
+
+                const protein = findNutrient("Protein");
+                const fiber = findNutrient("Fiber, total dietary");
+                const sodium = findNutrient("Sodium, Na");
+
+                displayResults(food.description, protein, fiber, sodium);
+                resultDiv.classList.remove('hidden');
+
+            } catch (err) {
+                console.error(err);
+                alert("Error: Cannot load dataset. Ensure you are using a local server (like Live Server in VS Code).");
+            }
+        }
+
+        function displayResults(name, p, f, s) {
+            document.getElementById('foodTitle').innerText = name;
+            document.getElementById('pVal').innerText = p;
+            document.getElementById('fVal').innerText = f;
+            document.getElementById('sVal').innerText = s;
+
+            const badge = document.getElementById('qualityBadge');
+            const feedback = document.getElementById('feedback');
+
+            // Quality Logic
+            if (p > 5 || f > 4) {
+                badge.innerText = "High Quality";
+                badge.className = "badge good";
+                feedback.innerText = "Excellent choice! This food is rich in essential nutrients.";
+            } else if (s > 500) {
+                badge.innerText = "Lower Quality";
+                badge.className = "badge poor";
+                feedback.innerText = "High sodium detected. Consider fresher alternatives.";
+            } else {
+                badge.innerText = "Average Quality";
+                badge.className = "badge neutral";
+                feedback.innerText = "This is a balanced, standard nutritional choice.";
+            }
+        }
+    </script>
+</body>
+</html>
