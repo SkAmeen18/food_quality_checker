@@ -135,7 +135,6 @@
         }
 
         .action-btn:hover { transform: translateY(-2px); background: #22c55e; }
-        .action-btn:disabled { background: #64748b; cursor: not-allowed; transform: none; }
 
         .result-card {
             margin-top: 25px;
@@ -227,156 +226,111 @@
 </div>
 
 <script>
+    // Local standalone database (No API or key required)
     const storageDatabase = {
-        "Hummus, commercial": { days: 5, type: "commercial" },
-        "Tomatoes, grape, raw": { days: 7, type: "raw" },
-        "Beans, snap, green, canned": { days: 4, type: "canned" },
-        "Frankfurter, beef, unheated": { days: 7, type: "commercial" },
-        "Nuts, almonds, dry roasted": { days: 30, type: "dried" },
-        "Kale, raw": { days: 5, type: "raw" },
-        "Egg, whole, raw, pasteurized": { days: 3, type: "pasteurized" },
-        "Egg, white, raw, pasteurized": { days: 3, type: "pasteurized" },
-        "Egg, white, dried": { days: 365, type: "dried" },
-        "Onion rings, frozen": { days: 3, type: "frozen" },
-        "Pickles, cucumber": { days: 30, type: "commercial" },
-        "Cheese, parmesan, grated": { days: 21, type: "commercial" },
-        "Cheese, American": { days: 14, type: "commercial" },
-        "Grapefruit juice": { days: 7, type: "raw" },
-        "Peaches, yellow, raw": { days: 5, type: "raw" },
-        "Seeds, sunflower seed": { days: 30, type: "dried" },
-        "Bread, white": { days: 7, type: "commercial" },
-        "Kale, frozen, cooked": { days: 4, type: "cooked" },
-        "Mustard, prepared": { days: 60, type: "commercial" },
-        "Kiwifruit, green, raw": { days: 7, type: "raw" },
-        "Yogurt, Greek, nonfat": { days: 7, type: "commercial" },
-        "Yogurt, plain, nonfat": { days: 7, type: "commercial" },
-        "Cheese, monterey jack": { days: 14, type: "commercial" },
-        "Cauliflower, raw": { days: 5, type: "raw" },
-        "Rice, red, raw": { days: 30, type: "raw" },
-        "Sorghum bran": { days: 30, type: "dried" },
-        "Parsnips, raw": { days: 10, type: "raw" },
-        "Peppers, banana, raw": { days: 7, type: "raw" },
-        "Swordfish, frozen": { days: 2, type: "frozen" },
-        "Watermelon, rind only, raw": { days: 4, type: "raw" }
+        "Hummus, commercial": { days: 5, type: "commercial", protein: 8, fiber: 6, sodium: 380 },
+        "Tomatoes, grape, raw": { days: 7, type: "raw", protein: 1, fiber: 1, sodium: 5 },
+        "Beans, snap, green, canned": { days: 4, type: "canned", protein: 1, fiber: 2, sodium: 290 },
+        "Frankfurter, beef, unheated": { days: 7, type: "commercial", protein: 12, fiber: 0, sodium: 560 },
+        "Nuts, almonds, dry roasted": { days: 30, type: "dried", protein: 21, fiber: 11, sodium: 1 },
+        "Kale, raw": { days: 5, type: "raw", protein: 3, fiber: 4, sodium: 38 },
+        "Egg, whole, raw, pasteurized": { days: 3, type: "pasteurized", protein: 13, fiber: 0, sodium: 140 },
+        "Egg, white, raw, pasteurized": { days: 3, type: "pasteurized", protein: 11, fiber: 0, sodium: 166 },
+        "Egg, white, dried": { days: 365, type: "dried", protein: 81, fiber: 0, sodium: 1240 },
+        "Onion rings, frozen": { days: 3, type: "frozen", protein: 3, fiber: 2, sodium: 320 },
+        "Pickles, cucumber": { days: 30, type: "commercial", protein: 0, fiber: 1, sodium: 800 },
+        "Cheese, parmesan, grated": { days: 21, type: "commercial", protein: 38, fiber: 0, sodium: 1529 },
+        "Cheese, American": { days: 14, type: "commercial", protein: 18, fiber: 0, sodium: 1200 },
+        "Grapefruit juice": { days: 7, type: "raw", protein: 1, fiber: 0, sodium: 2 },
+        "Peaches, yellow, raw": { days: 5, type: "raw", protein: 1, fiber: 2, sodium: 0 },
+        "Seeds, sunflower seed": { days: 30, type: "dried", protein: 21, fiber: 9, sodium: 9 },
+        "Bread, white": { days: 7, type: "commercial", protein: 9, fiber: 3, sodium: 490 },
+        "Kale, frozen, cooked": { days: 4, type: "cooked", protein: 3, fiber: 3, sodium: 22 },
+        "Mustard, prepared": { days: 60, type: "commercial", protein: 4, fiber: 3, sodium: 1100 },
+        "Kiwifruit, green, raw": { days: 7, type: "raw", protein: 1, fiber: 3, sodium: 3 },
+        "Yogurt, Greek, nonfat": { days: 7, type: "commercial", protein: 10, fiber: 0, sodium: 36 },
+        "Yogurt, plain, nonfat": { days: 7, type: "commercial", protein: 6, fiber: 0, sodium: 52 },
+        "Cheese, monterey jack": { days: 14, type: "commercial", protein: 25, fiber: 0, sodium: 540 },
+        "Cauliflower, raw": { days: 5, type: "raw", protein: 2, fiber: 2, sodium: 30 },
+        "Rice, red, raw": { days: 30, type: "raw", protein: 7, fiber: 4, sodium: 5 },
+        "Sorghum bran": { days: 30, type: "dried", protein: 11, fiber: 67, sodium: 6 },
+        "Parsnips, raw": { days: 10, type: "raw", protein: 1, fiber: 5, sodium: 10 },
+        "Peppers, banana, raw": { days: 7, type: "raw", protein: 2, fiber: 3, sodium: 13 },
+        "Swordfish, frozen": { days: 2, type: "frozen", protein: 20, fiber: 0, sodium: 90 },
+        "Watermelon, rind only, raw": { days: 4, type: "raw", protein: 1, fiber: 1, sodium: 2 }
     };
 
-    // Helper function to extract ONLY the clean food name
+    // Helper function to extract ONLY clean food name for the list display
     function getCleanFoodName(fullKey) {
-        // Known prep words to filter out if appended to commas
         const filterWords = ['raw', 'cooked', 'canned', 'frozen', 'pasteurized', 'dried', 'commercial', 'unheated', 'prepared'];
         const parts = fullKey.split(',').map(p => p.trim());
-        
-        // Keep parts that are not preparation descriptor words
         const cleanParts = parts.filter(part => !filterWords.includes(part.toLowerCase()));
-        
         return cleanParts.join(', ');
     }
 
-    // Populate Sidebar with Clean Names
+    // Populate Sidebar
     const listElement = document.getElementById('itemList');
     Object.keys(storageDatabase).forEach(itemKey => {
         const displayName = getCleanFoodName(itemKey);
 
         let li = document.createElement('li');
-        li.innerText = displayName; // Displays ONLY clean food name
+        li.innerText = displayName; 
         
         li.onclick = () => { 
-            // Auto-fill input with the clean food name
             document.getElementById('foodInput').value = displayName;
-            
-            // Auto-select type based on item data
             const itemData = storageDatabase[itemKey];
             if (itemData && itemData.type) {
                 document.getElementById('foodType').value = itemData.type;
             }
-            
             checkAll(); 
         };
         listElement.appendChild(li);
     });
 
-    async function checkAll() {
-        const queryName = document.getElementById('foodInput').value.trim();
-        const selectedType = document.getElementById('foodType').value;
+    function checkAll() {
+        const queryName = document.getElementById('foodInput').value.trim().toLowerCase();
         const days = parseInt(document.getElementById('daysInput').value) || 0;
         const resultDiv = document.getElementById('result');
-        const checkBtn = document.getElementById('checkBtn');
 
         if (!queryName) {
             alert("Please enter a food name.");
             return;
         }
 
-        // Combine food name with selected type for targeted search
-        const fullSearchQuery = `${queryName} ${selectedType}`;
-
-        // UI Loading state
-        checkBtn.innerText = "SEARCHING...";
-        checkBtn.disabled = true;
-
-        try {
-            // Live fetch from official USDA FoodData Central REST API
-            const API_KEY = 'DEMO_KEY';
-            const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(fullSearchQuery)}&pageSize=5&api_key=${API_KEY}`);
-            
-            if (!response.ok) throw new Error("API Request failed");
-
-            const data = await response.json();
-
-            if (!data.foods || data.foods.length === 0) {
-                alert("Food item not found in USDA database.");
-                return;
+        // Find match in local storage
+        let matchedKey = null;
+        for (let key in storageDatabase) {
+            const primaryTerm = key.toLowerCase().split(',')[0].trim();
+            if (queryName.includes(primaryTerm) || primaryTerm.includes(queryName)) {
+                matchedKey = key;
+                break;
             }
-
-            const food = data.foods[0]; // Take best matching item
-
-            // Helper to extract nutrient by name safely
-            const getNut = (nutrientName) => {
-                if (!food.foodNutrients) return 0;
-                const n = food.foodNutrients.find(nu => 
-                    nu.nutrientName && nu.nutrientName.toLowerCase().includes(nutrientName.toLowerCase())
-                );
-                return n ? Math.round(n.value) : 0;
-            };
-
-            // Calculate max shelf life
-            let maxDays = 5; // Default safe estimate
-            const cleanQuery = queryName.toLowerCase();
-
-            for (let key in storageDatabase) {
-                const primaryTerm = key.toLowerCase().split(',')[0].trim();
-                if (cleanQuery.includes(primaryTerm) || primaryTerm.includes(cleanQuery)) {
-                    maxDays = storageDatabase[key].days;
-                    break;
-                }
-            }
-
-            const isSafe = days <= maxDays;
-
-            // Update UI elements
-            document.getElementById('foodTitle').innerText = food.description;
-            document.getElementById('pVal').innerText = getNut("Protein") + "g";
-            document.getElementById('fVal').innerText = getNut("Fiber") + "g";
-            document.getElementById('sVal').innerText = getNut("Sodium") + "mg";
-
-            const banner = document.getElementById('freshnessBanner');
-            if (isSafe) {
-                banner.className = "freshness-banner status-safe";
-                banner.innerText = "SAFE TO EAT";
-            } else {
-                banner.className = "freshness-banner status-danger";
-                banner.innerText = "NOT SAFE TO EAT";
-            }
-
-            resultDiv.classList.remove('hidden');
-
-        } catch (e) {
-            console.error(e);
-            alert("An error occurred while checking food safety. Please check your network connection.");
-        } finally {
-            checkBtn.innerText = "CHECK SAFETY";
-            checkBtn.disabled = false;
         }
+
+        if (!matchedKey) {
+            alert("Food item not found in local database. Try selecting one from the sidebar list!");
+            return;
+        }
+
+        const foodData = storageDatabase[matchedKey];
+        const isSafe = days <= foodData.days;
+
+        // Update UI
+        document.getElementById('foodTitle').innerText = matchedKey;
+        document.getElementById('pVal').innerText = foodData.protein + "g";
+        document.getElementById('fVal').innerText = foodData.fiber + "g";
+        document.getElementById('sVal').innerText = foodData.sodium + "mg";
+
+        const banner = document.getElementById('freshnessBanner');
+        if (isSafe) {
+            banner.className = "freshness-banner status-safe";
+            banner.innerText = "SAFE TO EAT";
+        } else {
+            banner.className = "freshness-banner status-danger";
+            banner.innerText = "NOT SAFE TO EAT";
+        }
+
+        resultDiv.classList.remove('hidden');
     }
 </script>
 </body>
