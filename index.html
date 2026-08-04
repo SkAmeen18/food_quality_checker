@@ -7,9 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #1e3a8a 0%, #581c87 100%);
-            --glass: rgba(255, 255, 255, 0.1);
-            --card-bg: rgba(255, 255, 255, 0.98);
+            /* Green & White Palette */
+            --bg-gradient: linear-gradient(135deg, #064e3b 0%, #064e3b 50%, #064e3b 100%);
+            --glass: rgba(255, 255, 255, 0.15);
+            --card-bg: #ffffff;
+            --primary-green: #059669;
+            --accent-green: #10b981;
+            --dark-green: #064e3b;
+            --text-dark: #0f172a;
         }
 
         body {
@@ -21,7 +26,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: #1a202c;
+            color: var(--text-dark);
             box-sizing: border-box;
         }
 
@@ -30,47 +35,48 @@
             display: flex;
             flex-direction: row;
             width: 100%;
-            max-width: 1000px;
-            gap: 40px;
+            max-width: 820px; /* Reduced overall wrapper width */
+            gap: 25px; /* Compact gap */
             align-items: flex-start;
         }
 
-        /* Left Side: Analyzer */
+        /* Left Side: Analyzer (Smaller & Compact) */
         .container {
-            flex: 1.2;
-            background: var(--glass);
+            flex: 1.1;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 35px;
-            padding: 35px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 22px; /* Reduced padding from 35px */
+            box-shadow: 0 20px 40px -10px rgba(0, 32, 16, 0.4);
             box-sizing: border-box;
         }
 
         /* Right Side: Sidebar */
         .sidebar {
-            flex: 0.8;
-            background: rgba(0, 0, 0, 0.2);
+            flex: 0.9;
+            background: var(--glass);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 35px;
-            padding: 25px;
-            max-height: 700px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            padding: 20px;
+            max-height: 580px;
             display: flex;
             flex-direction: column;
             color: white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px -10px rgba(0, 32, 16, 0.25);
             box-sizing: border-box;
         }
 
-        h1 { font-weight: 800; color: white; margin: 0; font-size: 2.2rem; text-align: center; }
-        .subtitle { color: rgba(255, 255, 255, 0.6); text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
+        h1 { font-weight: 800; color: var(--dark-green); margin: 0; font-size: 1.6rem; text-align: center; }
+        .subtitle { color: #047857; text-align: center; margin-bottom: 18px; font-size: 0.8rem; font-weight: 600; }
 
         .sidebar h3 { 
-            margin: 0 0 15px 0; 
-            font-size: 1.2rem; 
-            border-bottom: 1px solid rgba(255,255,255,0.2); 
-            padding-bottom: 10px;
+            margin: 0 0 12px 0; 
+            font-size: 1.05rem; 
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3); 
+            padding-bottom: 8px;
+            color: white;
         }
 
         /* The List on the Right */
@@ -79,100 +85,110 @@
             padding: 0; 
             margin: 0; 
             overflow-y: auto; 
-            max-height: 600px;
+            max-height: 10000px;
         }
 
         .item-list li { 
-            padding: 12px 15px; 
-            font-size: 0.9rem; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            padding: 9px 13px; 
+            font-size: 0.85rem; 
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.15); 
             cursor: pointer;
             transition: 0.2s;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .item-list li:hover { 
-            background: rgba(255,255,255,0.1); 
+            background: rgba(255, 255, 255, 0.25); 
             color: white;
-            border-radius: 12px;
+            border-radius: 8px;
+            padding-left: 16px;
         }
 
         .input-group {
-            background: white;
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            background: #f0fdf4;
+            border: 1.5px solid #bbf7d0;
+            border-radius: 14px;
+            padding: 10px 12px; /* Smaller inputs */
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
         }
 
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 5px; margin-left: 5px;}
+        label { display: block; font-size: 0.68rem; font-weight: 800; color: var(--primary-green); text-transform: uppercase; margin-bottom: 3px; margin-left: 2px;}
 
         input, select {
             width: 100%;
             border: none;
-            padding: 8px 5px;
-            font-size: 1.1rem;
+            padding: 4px 2px;
+            font-size: 0.95rem; /* Slightly smaller text */
             outline: none;
             font-family: inherit;
             background: transparent;
-            color: #1a202c;
+            color: var(--dark-green);
+            font-weight: 600;
             box-sizing: border-box;
             cursor: pointer;
         }
 
         .action-btn {
             width: 100%;
-            background: #000;
+            background: var(--dark-green);
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 20px;
+            padding: 12px; /* Smaller button height */
+            border-radius: 14px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 1rem;
-            margin-top: 10px;
+            font-size: 0.9rem;
+            margin-top: 6px;
+            box-shadow: 0 8px 16px -4px rgba(6, 78, 59, 0.4);
         }
 
-        .action-btn:hover { transform: translateY(-2px); background: #22c55e; }
+        .action-btn:hover { 
+            transform: translateY(-1px); 
+            background: var(--accent-green); 
+            box-shadow: 0 10px 18px -4px rgba(16, 185, 129, 0.5);
+        }
 
         .result-card {
-            margin-top: 25px;
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 25px;
-            animation: slideIn 0.4s ease-out;
+            margin-top: 18px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 16px;
+            animation: slideIn 0.3s ease-out;
             text-align: center;
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         .freshness-banner {
-            padding: 15px;
-            border-radius: 15px;
+            padding: 10px;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
         }
 
-        .status-safe { background: #dcfce7; color: #15803d; }
-        .status-danger { background: #fee2e2; color: #b91c1c; }
+        .status-safe { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .status-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px;}
-        .grid-item { background: #f8fafc; padding: 12px; border-radius: 15px; text-align: center; border: 1px solid #f1f5f9; }
-        .val { display: block; font-weight: 800; font-size: 1.1rem; }
-        .lbl { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px;}
+        .grid-item { background: #ffffff; padding: 8px; border-radius: 10px; text-align: center; border: 1px solid #e2e8f0; }
+        .val { display: block; font-weight: 800; font-size: 0.95rem; color: var(--dark-green); }
+        .lbl { font-size: 0.6rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
 
         .hidden { display: none; }
 
         /* Custom Scrollbar for Sidebar */
-        .item-list::-webkit-scrollbar { width: 5px; }
-        .item-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .item-list::-webkit-scrollbar { width: 4px; }
+        .item-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 10px; }
 
         /* Responsive */
-        @media (max-width: 850px) {
+        @media (max-width: 768px) {
             .wrapper { flex-direction: column; }
-            .sidebar { width: 100%; flex: none; max-height: 300px; }
+            .sidebar { width: 100%; flex: none; max-height: 250px; }
         }
     </style>
 </head>
@@ -210,7 +226,7 @@
 
         <div id="result" class="result-card hidden">
             <div id="freshnessBanner" class="freshness-banner"></div>
-            <h2 id="foodTitle" style="margin: 0; font-size: 1rem; color: #64748b; font-weight: 400;"></h2>
+            <h2 id="foodTitle" style="margin: 0; font-size: 0.95rem; color: #334155; font-weight: 700;"></h2>
             <div class="grid">
                 <div class="grid-item"><span class="lbl">Protein</span><span class="val" id="pVal">0g</span></div>
                 <div class="grid-item"><span class="lbl">Fiber</span><span class="val" id="fVal">0g</span></div>
@@ -226,7 +242,6 @@
 </div>
 
 <script>
-    // Local standalone database (No API or key required)
     const storageDatabase = {
         "Hummus, commercial": { days: 5, type: "commercial", protein: 8, fiber: 6, sodium: 380 },
         "Tomatoes, grape, raw": { days: 7, type: "raw", protein: 1, fiber: 1, sodium: 5 },
@@ -260,7 +275,6 @@
         "Watermelon, rind only, raw": { days: 4, type: "raw", protein: 1, fiber: 1, sodium: 2 }
     };
 
-    // Helper function to extract ONLY clean food name for the list display
     function getCleanFoodName(fullKey) {
         const filterWords = ['raw', 'cooked', 'canned', 'frozen', 'pasteurized', 'dried', 'commercial', 'unheated', 'prepared'];
         const parts = fullKey.split(',').map(p => p.trim());
@@ -268,7 +282,6 @@
         return cleanParts.join(', ');
     }
 
-    // Populate Sidebar
     const listElement = document.getElementById('itemList');
     Object.keys(storageDatabase).forEach(itemKey => {
         const displayName = getCleanFoodName(itemKey);
@@ -297,7 +310,6 @@
             return;
         }
 
-        // Find match in local storage
         let matchedKey = null;
         for (let key in storageDatabase) {
             const primaryTerm = key.toLowerCase().split(',')[0].trim();
@@ -308,14 +320,13 @@
         }
 
         if (!matchedKey) {
-            alert("Food item not found in local database. Try selecting one from the sidebar list!");
+            alert("Food item not found in database. Try selecting one from the sidebar list!");
             return;
         }
 
         const foodData = storageDatabase[matchedKey];
         const isSafe = days <= foodData.days;
 
-        // Update UI
         document.getElementById('foodTitle').innerText = matchedKey;
         document.getElementById('pVal').innerText = foodData.protein + "g";
         document.getElementById('fVal').innerText = foodData.fiber + "g";
